@@ -44,7 +44,7 @@ public class BirthCouponStep {
     public JdbcBatchItemWriter<BirthMemberDto> birthCouponItemWriter() {
         return new JdbcBatchItemWriterBuilder<BirthMemberDto>()
                 .dataSource(dataSource)
-                .sql("insert into member_coupon (status, issue_date, expire_date, coupon_id, user_id) values ('NEW', DATE(now()), LAST_DAY(CURDATE()), 1, :memberId)") //:memberId자리에 쿠폰넘버 들어가야 함
+                .sql("insert into member_coupon (status, issue_date, expire_date, coupon_id, user_id) values ('NEW', DATE(now()), LAST_DAY(CURDATE()), 1, :memberId)")
                 .beanMapped()
                 .build();
     }

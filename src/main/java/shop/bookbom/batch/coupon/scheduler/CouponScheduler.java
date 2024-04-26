@@ -15,8 +15,7 @@ public class CouponScheduler {
     private final CouponBatchConfig couponBatchConfig;
 
     //매월 00시 1분에 실행
-    //@Scheduled(cron = "0 1 0 1 * *")
-    @Scheduled(cron = "0 * 16 * * *")
+    @Scheduled(cron = "0 1 0 1 * *")
     public void runBirthCouponJob() {
         try {
             JobParameters jobParameters = new JobParametersBuilder()

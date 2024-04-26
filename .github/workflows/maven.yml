@@ -28,7 +28,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package -Dspring.profiles.active=prod -Deureka.client.register-with-eureka=false -Deureka.client.fetch-registry=false --file pom.xml
+        run: mvn -B package -Dsecure.manager.appkey="${{ secrets.SECURE_MANAGER_APPKEY }}" -Dkeystore.password="${{ secrets.SECURE_MANAGER_PASSWORD }}" -Dspring.profiles.active=prod -Deureka.client.register-with-eureka=false -Deureka.client.fetch-registry=false --file pom.xml
 
       - name: upload file
         uses: appleboy/scp-action@master
@@ -43,11 +43,15 @@ jobs:
 
       - name: execute shell script
         uses: appleboy/ssh-action@master
+        env:
+          SECURE_MANAGER_APPKEY: ${{ secrets.SECURE_MANAGER_APPKEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.SECURE_MANAGER_PASSWORD }}
         with:
           host: ${{ secrets.SSH_IP }}
           username: ${{ secrets.SSH_ID }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          envs: SECURE_MANAGER_APPKEY, KEYSTORE_PASSWORD
           script_stop: true
           script: "./batch/startup.sh"
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
